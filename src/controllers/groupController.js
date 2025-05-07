@@ -26,7 +26,7 @@ const getGroups = async (req, res) => {
     res.status(500).json({ message: "Failed to fetch groups" });
   }
 };
-
+//
 const getGroupById = async (req, res) => {
   try {
     const groupId = req.params.id;
