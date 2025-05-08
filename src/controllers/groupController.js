@@ -56,10 +56,10 @@ const createGroup = async (req, res) => {
     if (!name || !admin_uid) {
       return res.status(400).json({ message: "Name and description are required" });
     }
-    const members = ''
+    let members = [];
     const isSettled= false
     if(member){
-      const members = member.split(',').map(member => member.trim());
+       members = member.split(',').map(member => member.trim());
     }
     const groupsCollection = db.collection("Groups");
     const result = await groupsCollection.insertOne({ name, admin_uid,members,isSettled });
@@ -143,6 +143,32 @@ const updateImage = async (req, res) => {
     res.status(500).json({ message: "Failed to update group" });
   }
 };
+const createExpenses = async (req, res) => {
+  try {
+    const groupId = req.params.id;
+    const expense = req.body; // Entire expense object (description, amount, splitAmong, etc.)
+
+    if (!ObjectId.isValid(groupId)) {
+      return res.status(400).json({ message: "Invalid group ID" });
+    }
+
+    const groupsCollection = db.collection("Groups");
+
+    const result = await groupsCollection.updateOne(
+      { _id: new ObjectId(groupId) },
+      { $push: { expenses: expense } } // Push to expenses array
+    );
+
+    if (result.matchedCount === 0) {
+      return res.status(404).json({ message: "Group not found" });
+    }
+
+    res.status(200).json({ message: "Expense added successfully" });
+  } catch (error) {
+    console.error("Error adding expense:", error);
+    res.status(500).json({ message: "Failed to add expense" });
+  }
+};
 module.exports = {
   getGroups,
   getGroupById,
@@ -150,4 +176,5 @@ module.exports = {
   updateGroup,
   deleteGroup,
   updateImage,
+  createExpenses,
 };

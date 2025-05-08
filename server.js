@@ -57,8 +57,12 @@ app.post("/api/verify-token", async (req, res) => {
 
 // Import routes after DB connection
 const groupRoutes = require("./src/routes/groupRoutes");
+const budgetRoutes = require("./src/routes/budgetRoutes");
+
 
 app.use("/api/groups", groupRoutes); // Use the group routes
+app.use("/api/budget", budgetRoutes); // Use the group routes
+
 
 // Start the Express server
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
