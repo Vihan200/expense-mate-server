@@ -1,20 +1,9 @@
-const { MongoClient, ObjectId } = require("mongodb");
+const { ObjectId } = require("mongodb");
+const { getDB } = require("../../dbConnection");
+const { sendNotification } = require("../services/notification.service");
+const { getToken } = require("../../tokenStorage");
 
-const mongoURI = process.env.MONGO_URI || "mongodb://vihanganirmitha200:HoneyBadgers@ac-w6sx0kt-shard-00-00.brbzcet.mongodb.net:27017,ac-w6sx0kt-shard-00-01.brbzcet.mongodb.net:27017,ac-w6sx0kt-shard-00-02.brbzcet.mongodb.net:27017/?replicaSet=atlas-roevg6-shard-0&ssl=true&authSource=admin&retryWrites=true&w=majority&appName=expenseCluster";
-const client = new MongoClient(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true });
-let db;
-
-const connectToMongoDB = async () => {
-  try {
-    await client.connect();
-    db = client.db("RAD"); // Initialize the database connection
-    console.log("MongoDB connected successfully");
-  } catch (error) {
-    console.error("Failed to connect to MongoDB:", error);
-  }
-};
-
-connectToMongoDB(); // Ensure MongoDB connection is established
+const db = getDB();
 
 const getGroups = async (req, res) => {
   try {
@@ -65,6 +54,11 @@ const createGroup = async (req, res) => {
     const result = await groupsCollection.insertOne({ name, admin_uid,members,isSettled });
     
     res.status(200).json({ message: "Group created", groupId: result.insertedId });
+    await sendNotification(
+      getToken(),
+      `New group ${name} created`,
+      ""
+    );
   } catch (error) {
     console.error("Error creating group:", error);
     res.status(500).json({ message: "Failed to create group" });
@@ -91,6 +85,11 @@ const updateGroup = async (req, res) => {
     }
 
     res.status(200).json({ message: "Group updated" });
+    await sendNotification(
+      getToken(),
+      `Group ${name} updated`,
+      ""
+    );
   } catch (error) {
     console.error("Error updating group:", error);
     res.status(500).json({ message: "Failed to update group" });
@@ -113,6 +112,11 @@ const deleteGroup = async (req, res) => {
     }
 
     res.status(200).json({ message: "Group deleted" });
+    await sendNotification(
+      getToken(),
+      "Group deleted",
+      ""
+    );
   } catch (error) {
     console.error("Error deleting group:", error);
     res.status(500).json({ message: "Failed to delete group" });
@@ -138,6 +142,11 @@ const updateImage = async (req, res) => {
     }
 
     res.status(200).json({ message: "Group updated" });
+    await sendNotification(
+      getToken(),
+      "Group display image updated",
+      ""
+    );
   } catch (error) {
     console.error("Error updating group:", error);
     res.status(500).json({ message: "Failed to update group" });
@@ -164,6 +173,11 @@ const createExpenses = async (req, res) => {
     }
 
     res.status(200).json({ message: "Expense added successfully" });
+    await sendNotification(
+      getToken(),
+      "Expenses updated",
+      ""
+    );
   } catch (error) {
     console.error("Error adding expense:", error);
     res.status(500).json({ message: "Failed to add expense" });
