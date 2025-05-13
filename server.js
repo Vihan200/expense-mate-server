@@ -1,9 +1,8 @@
 require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
-const firebaseAdmin = require('./firebase-admin-setup');
+const firebaseAdmin = require("./firebase-admin-setup");
 const { connectToMongoDB } = require("./dbConnection");
-require("./src/services/mail.service");
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -39,10 +38,11 @@ connectToMongoDB()
     const groupRoutes = require("./src/routes/groupRoutes");
     const budgetRoutes = require("./src/routes/budgetRoutes");
     const notificationRoutes = require("./src/routes/notificationRoutes");
+    require("./src/services/mail.service");
 
     app.use("/api/groups", groupRoutes);
     app.use("/api/budget", budgetRoutes);
-    app.use("/api/notifications",notificationRoutes);
+    app.use("/api/notifications", notificationRoutes);
 
     app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
   })
