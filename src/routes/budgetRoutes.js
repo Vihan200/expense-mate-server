@@ -5,7 +5,6 @@ const { createBudget ,getBudgetById  } = require("../controllers/budgetControlle
 
 router.get("/user/:user", getBudgetById);
 
-// Route to create a new group
 router.post("/", createBudget);
 
 
