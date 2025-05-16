@@ -113,7 +113,7 @@ const updateGroup = async (req, res) => {
     group.members.forEach(async (memberEmail) => {
       if (memberEmail) {
         console.log("sending update email");
-        await sendGroupUpdatedEmail(memberEmail, name, admin_uid.split("@")[0]);
+        await sendGroupUpdatedEmail(memberEmail, name);
         await new Promise((resolve) => setTimeout(resolve, 500));
       }
     });
@@ -147,7 +147,7 @@ const deleteGroup = async (req, res) => {
     });
     group.members.forEach(async (memberEmail) => {
       if (memberEmail) {
-        await sendGroupDeletedEmail(memberEmail, name, admin_uid.split("@")[0]);
+        await sendGroupDeletedEmail(memberEmail, name);
         await new Promise((resolve) => setTimeout(resolve, 500));
       }
     });
@@ -227,6 +227,72 @@ const createExpenses = async (req, res) => {
     res.status(500).json({ message: "Failed to add expense" });
   }
 };
+
+const addMember = async (req, res) => {
+  try {
+    const groupId = req.params.id;
+    const { members } = req.body; // Expecting members to be an array or comma-separated string
+
+    if (!ObjectId.isValid(groupId)) {
+      return res.status(400).json({ message: "Invalid group ID" });
+    }
+
+    if (!members) {
+      return res.status(400).json({ message: "Members are required" });
+    }
+
+    // Convert members to array if it's a string
+    let membersArray = Array.isArray(members) 
+      ? members 
+      : members.split(",").map(member => member.trim());
+
+    if (membersArray.length === 0) {
+      return res.status(400).json({ message: "No valid members provided" });
+    }
+
+    const groupsCollection = db.collection("Groups");
+    
+    // First get the group to check if it exists and get its name
+    const group = await groupsCollection.findOne({
+      _id: new ObjectId(groupId),
+    });
+
+    if (!group) {
+      return res.status(404).json({ message: "Group not found" });
+    }
+
+    // Add members to the group (using $addToSet to avoid duplicates)
+    const result = await groupsCollection.updateOne(
+      { _id: new ObjectId(groupId) },
+      { $addToSet: { members: { $each: membersArray } } }
+    );
+
+    if (result.matchedCount === 0) {
+      return res.status(404).json({ message: "Group not found" });
+    }
+
+    res.status(200).json({ message: "Members added successfully" });
+    
+    // Send emails to new members
+    await Promise.all(
+      membersArray.map(async (memberEmail) => {
+        if (memberEmail) {
+          await sendGroupAddedEmail(
+            memberEmail, 
+            group.name, 
+            group.admin_uid.split("@")[0]
+          );
+          await new Promise((resolve) => setTimeout(resolve, 500));
+        }
+      })
+    );
+
+  } catch (error) {
+    console.error("Error adding members:", error);
+    res.status(500).json({ message: "Failed to add members" });
+  }
+};
+
 module.exports = {
   getGroups,
   getGroupById,
@@ -235,4 +301,5 @@ module.exports = {
   deleteGroup,
   updateImage,
   createExpenses,
+  addMember
 };

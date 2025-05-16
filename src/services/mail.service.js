@@ -244,7 +244,7 @@ async function sendGroupAddedEmail(email, groupName, adminName) {
   }
 }
 
-async function sendGroupUpdatedEmail(email, groupName, adminName) {
+async function sendGroupUpdatedEmail(email, groupName) {
   const userName = email.split("@")[0].replace(/[^a-zA-Z]/g, " ") || "there";
   const formattedName =
     userName.charAt(0).toUpperCase() + userName.slice(1).toLowerCase();
@@ -274,9 +274,6 @@ async function sendGroupUpdatedEmail(email, groupName, adminName) {
                   <h3 style="margin: 0; color: #2d3748; font-size: 18px;">
                     ${groupName}
                   </h3>
-                  <p style="margin: 5px 0 0 0; color: #718096; font-size: 14px;">
-                    Updated by: ${adminName}
-                  </p>
                 </div>
               </div>
             </div>
@@ -316,7 +313,7 @@ async function sendGroupUpdatedEmail(email, groupName, adminName) {
   }
 }
 
-async function sendGroupDeletedEmail(email, groupName, adminName) {
+async function sendGroupDeletedEmail(email, groupName) {
   const userName = email.split("@")[0].replace(/[^a-zA-Z]/g, " ") || "there";
   const formattedName =
     userName.charAt(0).toUpperCase() + userName.slice(1).toLowerCase();
@@ -346,9 +343,6 @@ async function sendGroupDeletedEmail(email, groupName, adminName) {
                   <h3 style="margin: 0; color: #2d3748; font-size: 18px;">
                     ${groupName}
                   </h3>
-                  <p style="margin: 5px 0 0 0; color: #718096; font-size: 14px;">
-                    Deleted by: ${adminName}
-                  </p>
                 </div>
               </div>
             </div>
