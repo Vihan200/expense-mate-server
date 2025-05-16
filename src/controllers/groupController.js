@@ -13,8 +13,9 @@ const db = getDB();
 
 const getGroups = async (req, res) => {
   try {
+    const user = req.query.uid;
     const groupsCollection = db.collection("Groups");
-    const groups = await groupsCollection.find({}).toArray();
+    const groups = await groupsCollection.find({ members: user }).toArray();
     res.status(200).json(groups);
   } catch (error) {
     console.error("Error fetching groups:", error);
