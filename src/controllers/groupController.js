@@ -112,7 +112,7 @@ const updateGroup = async (req, res) => {
     group.members.forEach(async (memberEmail) => {
       if (memberEmail) {
         console.log("sending update email");
-        await sendGroupUpdatedEmail(memberEmail, name, admin_uid.split("@")[0]);
+        await sendGroupUpdatedEmail(memberEmail, name);
         await new Promise((resolve) => setTimeout(resolve, 500));
       }
     });
@@ -146,7 +146,7 @@ const deleteGroup = async (req, res) => {
     });
     group.members.forEach(async (memberEmail) => {
       if (memberEmail) {
-        await sendGroupDeletedEmail(memberEmail, name, admin_uid.split("@")[0]);
+        await sendGroupDeletedEmail(memberEmail, name);
         await new Promise((resolve) => setTimeout(resolve, 500));
       }
     });
