@@ -68,7 +68,7 @@ async function sendDebtReminderEmail(email, debtData) {
       name: g.name,
       amount: `LKR ${g.amount.toFixed(2)}`,
     })),
-    link: "https://expensemate.app/dashboard",
+    link: "https://expense-mate-nuew.onrender.com/",
   };
 
   try {
@@ -213,7 +213,7 @@ async function sendGroupAddedEmail(email, groupName, adminName) {
               You can now view and participate in this group's expenses.
             </p>
 
-            <a href="https://expensemate.app/dashboard" 
+            <a href="https://expense-mate-nuew.onrender.com/" 
               style="display: block; width: 100%; 
                      text-align: center; 
                      background: #1a73e8; 
@@ -282,7 +282,7 @@ async function sendGroupUpdatedEmail(email, groupName) {
               Please check the group for latest updates and changes.
             </p>
 
-            <a href="https://expensemate.app/dashboard" 
+            <a href="https://expense-mate-nuew.onrender.com/" 
               style="display: block; width: 100%; 
                      text-align: center; 
                      background: #1a73e8; 
@@ -428,7 +428,7 @@ async function sendExpenseAddedEmail(email, groupName, expenseDetails) {
               }
             </p>
 
-            <a href="https://expensemate.app/dashboard" 
+            <a href="https://expense-mate-nuew.onrender.com/" 
               style="display: block; width: 100%; 
                      text-align: center; 
                      background: #1a73e8; 
