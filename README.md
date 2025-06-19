@@ -7,13 +7,13 @@
 ## 📸 UI Preview
 
 ### 🔹 Dashboard Overview
-![Personal Budget](./assets/dashboard.png)
+![Personal Budget](./dashboard.png)
 
 ### 🔹 My Budget Breakdown
-![Budget Charts](./assets/my-budget.png)
+![Budget Charts](./my-budget.png)
 
 ### 🔹 Group Expense Management
-![Group View](./assets/group-ella-trip.png)
+![Group View](./group-ella-trip.png)
 
 ---
 
